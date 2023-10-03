@@ -1,19 +1,64 @@
+import re
 from event import Event
 import storage
 
+def validate_date(date):
+    return re.match(r'\d{4}-\d{2}-\d{2}', date)
 
 def create_event(events):
     name = input("Enter event name: ")
-    date = input("Enter event date: ")
+    date = input("Enter event date (YYYY-MM-DD): ")
+
+    if not validate_date(date):
+        print("Invalid date format. Please use YYYY-MM-DD.")
+        return
+    
     event = Event(name, date)
     events.append(event)
     print(f"Event {event} created successfully!")
     storage.save_events(events)
 
+
+def update_event(events):
+    list_events(events)
+    if not events: return
+    
+    event_index = int(input("Enter the index of the event to update: "))
+    
+    if event_index < 0 or event_index >= len(events):
+        print("Invalid event index.")
+        return
+    
+    name = input("Enter new event name (press enter to skip): ")
+    date = input("Enter new event date (YYYY-MM-DD, press enter to skip): ")
+    
+    if date and not validate_date(date):
+        print("Invalid date format. Please use YYYY-MM-DD.")
+        return
+    
+    if name:
+        events[event_index].name = name
+    if date:
+        events[event_index].date = date
+    
+    storage.save_events(events)
+    print("Event updated successfully!")
+
+
+def search_events(events):
+    search_term = input("Enter search term (name or date): ").lower()
+    found_events = [event for event in events if search_term in event.name.lower() or search_term in event.date.lower()]
+    list_events(found_events)
     
 def add_attendee(events):
     list_events(events)
+    if not events: return
+
     event_index = int(input("Enter the index of the event to add attendee: "))
+    if event_index < 0 or event_index >= len(events):
+        print("Invalid event index.")
+        return
+    
     attendee = input("Enter attendee name: ")
     events[event_index].add_attendee(attendee)
     storage.save_events(events)
@@ -21,13 +66,23 @@ def add_attendee(events):
     
 def add_expense(events):
     list_events(events)
+    if not events: return
+
     event_index = int(input("Enter the index of the event to add expense: "))
+    if event_index < 0 or event_index >= len(events):
+        print("Invalid event index.")
+        return
+    
     expense = input("Enter expense description: ")
     events[event_index].add_expense(expense)
     storage.save_events(events)
 
     
 def list_events(events):
+    if not events:
+        print("No events available.")
+        return
+    
     print("Events:")
     for index, event in enumerate(events):
         print(f"{index}. {event}")
