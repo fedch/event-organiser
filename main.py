@@ -112,13 +112,58 @@ def add_expense(events):
 
 
 def update_expense(events):
-    # TODO: write the code the the update
-    pass
+    list_events(events)
+    if not events: return
+    
+    event_index = int(input("Enter the index of the event to update an expense: "))
+    if event_index < 0 or event_index >= len(events):
+        print("Invalid event index.")
+        return
+
+    event = events[event_index]
+    if not event.expenses:
+        print("There are no expenses for this event.")
+        return
+
+    for idx, expense in enumerate(event.expenses):
+        print(f"{idx}. {expense}")
+
+    expense_index = int(input("Enter the index of the expense to update: "))
+    if expense_index < 0 or expense_index >= len(event.expenses):
+        print("Invalid expense index.")
+        return
+
+    new_expense = input("Enter the new description for the expense: ")
+    event.expenses[expense_index] = new_expense
+    storage.save_events(events)
+    print("Expense updated successfully!")
 
 
 def delete_expense(events):
-    # TODO: write the code the the delete
-    pass
+    list_events(events)
+    if not events: return
+    
+    event_index = int(input("Enter the index of the event to delete an expense: "))
+    if event_index < 0 or event_index >= len(events):
+        print("Invalid event index.")
+        return
+
+    event = events[event_index]
+    if not event.expenses:
+        print("There are no expenses for this event.")
+        return
+
+    for idx, expense in enumerate(event.expenses):
+        print(f"{idx}. {expense}")
+
+    expense_index = int(input("Enter the index of the expense to delete: "))
+    if expense_index < 0 or expense_index >= len(event.expenses):
+        print("Invalid expense index.")
+        return
+
+    event.expenses.pop(expense_index)
+    storage.save_events(events)
+    print("Expense deleted successfully!")
     
 def list_events(events):
     events.sort(key=lambda x: x.date)  # Sorting events based on date
