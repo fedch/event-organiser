@@ -1,9 +1,10 @@
 class Event:
-    def __init__(self, name, date, attendees=None, expenses=None):
+    def __init__(self, name, date, attendees=None, expenses=None, category=None):
         self.name = name
         self.date = date
         self.attendees = attendees if attendees else []
         self.expenses = expenses if expenses else []
+        self.category = category or "General"
 
     def add_attendee(self, attendee):
         self.attendees.append(attendee)

@@ -13,7 +13,9 @@ def create_event(events):
         print("Invalid date format. Please use YYYY-MM-DD.")
         return
     
-    event = Event(name, date)
+    category = input("Enter event category (e.g., Work, Personal, Vacation, etc.): ")
+    
+    event = Event(name, date, category=category)
     events.append(event)
     print(f"Event {event} created successfully!")
     storage.save_events(events)
@@ -82,6 +84,39 @@ def search_events(events):
     search_term = input("Enter search term (name or date): ").lower()
     found_events = [event for event in events if search_term in event.name.lower() or search_term in event.date.lower()]
     list_events(found_events)
+
+
+def advanced_search(events):
+    print("1. Search by name")
+    print("2. Search by date range")
+    print("3. Search by category")
+    choice = int(input("Choose a search method: "))
+
+    if choice == 1:
+        search_events(events)
+    elif choice == 2:
+        start_date = input("Enter start date (yyyy-mm-dd): ")
+        end_date = input("Enter end date (yyyy-mm-dd): ")
+
+        for event in events:
+            if start_date <= event.date <= end_date:
+                print(event)
+    elif choice == 3:
+        category = input("Enter category to search: ")
+        for event in events:
+            if event.category.lower() == category.lower():
+                print(event)
+    else:
+        print("Invalid choice!")
+
+
+def summary_view(events):
+    upcoming_events = [event for event in events if event.date >= datetime.today().date()]
+    total_expenses = sum(len(event.expenses) for event in upcoming_events)
+
+    print(f"Total upcoming events: {len(upcoming_events)}")
+    print(f"Total expenses for upcoming events: {total_expenses}")
+
     
 def add_attendee(events):
     list_events(events)
@@ -191,7 +226,9 @@ if __name__ == "__main__":
             print("8. Delete Expense")
             print("9. Search Events")
             print("10. List Events")
-            print("11. Exit")
+            print("11. Advanced Search")
+            print("12. Summary View")
+            print("13. Exit")
             try:
                 choice = input("Enter your choice: ")
 
@@ -216,6 +253,10 @@ if __name__ == "__main__":
                 elif choice == 10:
                     list_events(events)
                 elif choice == 11:
+                    advanced_search(events)
+                elif choice == 12:
+                    summary_view(events)
+                elif choice == 13:
                     break
                 else:
                     print("Invalid choice, please enter a number between 1 and 11.")
