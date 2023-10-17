@@ -5,10 +5,8 @@ def load_events():
     try:
         with open('events.json', 'r') as file:
             data = json.load(file)
-            return [Event.from_dict(event) for event in data]
-    except FileNotFoundError:
-        return []
-    except json.JSONDecodeError:
+            return [Event.from_dict(event_data) for event_data in data]    
+    except (FileNotFoundError, json.JSONDecodeError):
         return []
 
 def save_events(events):
