@@ -1,0 +1,32 @@
+# Event Organizer
+A simple Python-based application for organizing and managing events.
+
+## Getting started 
+
+1. Ensure you have Python 3.10 installed.
+2. Clone the repository:
+
+```bash
+git clone [YOUR_REPOSITORY_URL] event-organizer
+cd event-organizer
+```
+
+3. Install any necessary dependencies (if any).
+4. Run the application:
+
+```bash
+python main.py
+```
+
+## Running Tests
+
+Navigate to the project root directory and run:
+
+```bash
+python -m unittest discover tests
+```
+
+## Features
+Create and manage event entries.
+Store event data in JSON format.
+Unit tests to ensure functionality.
